@@ -1,8 +1,55 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class StoryScreen extends StatelessWidget {
+import '../model/choice_model.dart';
+import '../model/story_model.dart';
+import '../model/story_state.dart';
+
+class StoryScreen extends StatefulWidget {
   const StoryScreen({super.key});
+
+  @override
+  State<StoryScreen> createState() => _StoryScreenState();
+}
+
+class _StoryScreenState extends State<StoryScreen> {
+
+  Story story =  Story(
+    states: [
+      StoryState(
+        text: 'این داستان شروع است...',
+        lose: false,
+        win: false,
+        choices: [
+          Choice(text: 'برو به مسیر A', nextStateIndex: 1),
+          Choice(text: 'برو به مسیر B', nextStateIndex: 2),
+        ],
+      ),
+      StoryState(
+        lose: false,
+        win: true,
+        text: 'تبریک شما برنده شدید!',
+        choices: [
+          Choice(text: 'شروع مجدد', nextStateIndex: 0),
+          Choice(text: 'برو به مسیر A2', nextStateIndex: 0),
+        ],
+      ),
+      StoryState(
+        lose: true,
+        win: false,
+        text: 'داداش.....مردی، خدا رحمتت کنه',
+        choices: [
+          Choice(text: 'شروع مجدد بازی', nextStateIndex: 0),
+          Choice(text: 'برو به مسیر B2', nextStateIndex: 0),
+        ],
+      ),
+      // وضعیت‌های بعدی داستان...
+    ],
+  );
+  int currentStoryIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,24 +90,54 @@ class StoryScreen extends StatelessWidget {
                         SizedBox(
                           width: size.width,
                             height: size.height / 2.2,
-                            child: Text("متن داستان اصلی",style: GoogleFonts.vazirmatn(fontSize: 14),textAlign: TextAlign.center)),
+                            child: Text(
+                               story.states[currentStoryIndex].text,
+                                style: GoogleFonts.vazirmatn(fontSize: 14),textAlign: TextAlign.center)),
                         // btns
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: const MaterialStatePropertyAll(Colors.lightBlue),
-                              minimumSize: MaterialStatePropertyAll(Size(size.width / 1.2,40)),
-                            ),
-                            onPressed: () {},
-                            child: Text("انتخاب اول",style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold))
-                        ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: const MaterialStatePropertyAll(Colors.pinkAccent),
-                            minimumSize: MaterialStatePropertyAll(Size(size.width / 1.2,40)),
+                        if(!story.states[currentStoryIndex].win && !story.states[currentStoryIndex].lose)...[
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: const MaterialStatePropertyAll(Colors.lightBlue),
+                                minimumSize: MaterialStatePropertyAll(Size(size.width / 1.2,40)),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  int nextIndex = story.states[currentStoryIndex].choices.first.nextStateIndex;
+                                  currentStoryIndex = nextIndex;
+                                });
+                              },
+                              child: Text(story.states[currentStoryIndex].choices.first.text,
+                                  style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold))
                           ),
-                            onPressed: () {},
-                            child: Text("انتخاب دوم",style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold))
-                        )
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: const MaterialStatePropertyAll(Colors.pinkAccent),
+                                minimumSize: MaterialStatePropertyAll(Size(size.width / 1.2,40)),
+                              ),
+                              onPressed: () {
+                                int nextIndex = story.states[currentStoryIndex].choices.last.nextStateIndex;
+                                setState(() {
+                                  currentStoryIndex = nextIndex;
+                                });
+                              },
+                              child: Text(story.states[currentStoryIndex].choices.last.text
+                                  ,style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold))
+                          )
+                        ] else if(story.states[currentStoryIndex].win || story.states[currentStoryIndex].lose )...[
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: const MaterialStatePropertyAll(Colors.red),
+                                minimumSize: MaterialStatePropertyAll(Size(size.width / 1.2,40)),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  currentStoryIndex = 0;
+                                });
+                              },
+                              child: Text("شروع مجدد"
+                                  ,style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold))
+                          )
+                        ]
                       ],
                     ),
                   ),
