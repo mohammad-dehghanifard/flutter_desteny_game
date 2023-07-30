@@ -83,7 +83,7 @@ class _StoryScreenState extends State<StoryScreen> {
                     color: Colors.white
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8,24,8,8),
+                    padding: const EdgeInsets.fromLTRB(16,24,16,8),
                     child: Column(
                       children: [
                         // title
@@ -98,7 +98,7 @@ class _StoryScreenState extends State<StoryScreen> {
                             child: Text(
                                story.states[currentStoryIndex].text,
                                 style: GoogleFonts.vazirmatn(fontSize: 14),textAlign: TextAlign.justify)),
-                        // btns
+                        // btn
                         if(!story.states[currentStoryIndex].win && !story.states[currentStoryIndex].lose)...[
                           ElevatedButton(
                               style: ButtonStyle(
