@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../model/choice_model.dart';
 import '../model/story_model.dart';
 import '../model/story_state.dart';
@@ -19,27 +16,30 @@ class _StoryScreenState extends State<StoryScreen> {
   Story story =  Story(
     states: [
       StoryState(
-        text: 'این داستان شروع است...',
+        title: "شهر در محاصره",
+        text: 'در خیمه شورای جنگ قدم میزنی که درست بیرون شهر زیبای الموت واقع شده. خرچند پدرت پادشاه،آشکارا اعلام کرده میخواهد شهر دچار دردسر نشود، اما برادران بزرگت – توس ، وارث تاج و تخت و گرسیو فرمانده سپاه امپراتوری – همراه عمویت نظام تصمیم به حمله گرفته اند. تو با حمله مخالفی اما عومیت نظام ادعا میکند ملکه الموت سلاح در اختیار دشمنان ایران قرار داده. چیکار میکنی؟ حمله میکنی یا همچنان با جنگ مخالفت میکنی؟',
         lose: false,
         win: false,
         choices: [
-          Choice(text: 'برو به مسیر A', nextStateIndex: 1),
-          Choice(text: 'برو به مسیر B', nextStateIndex: 2),
+          Choice(text: 'مخالفت با جنگ', nextStateIndex: 1),
+          Choice(text: 'حمله به شهر در کنار برادرانت', nextStateIndex: 2),
         ],
       ),
       StoryState(
+        title: "تبریک برنده شدی،عموی شما خائن بود!",
         lose: false,
         win: true,
-        text: 'تبریک شما برنده شدید!',
+        text: 'با برادران و عمویت مخالفت میکنی و با افراد وفادارت جلوی حمله به شهر رو میگیری اما محصاره شهر رو رها نمیکنی. یک پیک برای پدرت میفرستی و منتظر دستور پدرت میمونی. پیک به همراه پدرت برمیگرده و متوجه میشی که عموی تو قصد داشته با تصرف شهر و استفاده از سلاح جادویی که در اختیار ملکه شهر بوده پادشاهی رو تصرف کنه و پدرت رو بکشه. تو پاداش میگیری و عموی خائنت اعدام میشه.',
         choices: [
           Choice(text: 'شروع مجدد', nextStateIndex: 0),
           Choice(text: 'برو به مسیر A2', nextStateIndex: 0),
         ],
       ),
       StoryState(
+        title: "داداش عموت خائن بود زد همتون رو کشت :|",
         lose: true,
         win: false,
-        text: 'داداش.....مردی، خدا رحمتت کنه',
+        text: 'به همراه عمو و برادرانت به شهر حمله میکنید و به راحتی موفق میشید شهر رو فتح کنید. عموت نظام پیکی رو به سمت پدرت میفرسته و ازش میخواد برای جشن پیروزی به الموت بیاد. فردا شب پدرت به الموت میاد و با خشم وارد تالار جشن میشه. پدرت از کاری که کردین عصبانی شده و میخواد شما رو محاکمه کنه اما ناگهان تعداد زیادی ادم کش وارد تالار میشن و تو به همراه پدر ، برادر ها و تمام افرادتون رو میکشن. عموت نظام با لبخند تاج پادشاهی پدرت رو برمیداره و روی سر خودش میزاره.',
         choices: [
           Choice(text: 'شروع مجدد بازی', nextStateIndex: 0),
           Choice(text: 'برو به مسیر B2', nextStateIndex: 0),
@@ -83,16 +83,21 @@ class _StoryScreenState extends State<StoryScreen> {
                     color: Colors.white
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8,16,8,8),
+                    padding: const EdgeInsets.fromLTRB(8,24,8,8),
                     child: Column(
                       children: [
+                        // title
+                        Text(
+                    story.states[currentStoryIndex].title,
+                        style: GoogleFonts.vazirmatn(fontSize: 16,fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+                        const SizedBox(height: 16),
                         // story txt
                         SizedBox(
                           width: size.width,
-                            height: size.height / 2.2,
+                            height: size.height / 2.4,
                             child: Text(
                                story.states[currentStoryIndex].text,
-                                style: GoogleFonts.vazirmatn(fontSize: 14),textAlign: TextAlign.center)),
+                                style: GoogleFonts.vazirmatn(fontSize: 14),textAlign: TextAlign.justify)),
                         // btns
                         if(!story.states[currentStoryIndex].win && !story.states[currentStoryIndex].lose)...[
                           ElevatedButton(
